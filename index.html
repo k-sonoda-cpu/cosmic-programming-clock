@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+
+<meta charset="UTF-8">
+<title>Cosmic Programming Clock</title>
+
+<link rel="stylesheet"
+href="https://pyscript.net/releases/2024.1.1/core.css">
+
+<script type="module"
+src="https://pyscript.net/releases/2024.1.1/core.js"></script>
+
+<style>
+
+body{
+background:#000;
+color:white;
+font-family:sans-serif;
+text-align:center;
+margin:0;
+padding:40px;
+}
+
+h1{
+letter-spacing:3px;
+margin-bottom:40px;
+}
+
+/* layout */
+
+.container{
+display:flex;
+justify-content:center;
+gap:80px;
+}
+
+/* 時計 */
+
+.clock{
+position:relative;
+width:220px;
+height:220px;
+border-radius:50%;
+
+background:
+radial-gradient(circle at 30% 30%, rgba(255,255,255,0.2) 1px, transparent 2px),
+radial-gradient(circle at 70% 60%, rgba(255,255,255,0.15) 1px, transparent 2px),
+radial-gradient(circle at 50% 80%, rgba(255,255,255,0.2) 1px, transparent 2px),
+radial-gradient(circle at 20% 70%, rgba(255,255,255,0.2) 1px, transparent 2px),
+radial-gradient(circle,#070720,#000);
+
+border:3px solid #333;
+
+box-shadow:
+0 0 60px rgba(255,255,255,0.05),
+inset 0 0 40px rgba(255,255,255,0.05);
+
+animation:spaceRotate 120s linear infinite;
+}
+
+/* 星回転 */
+
+@keyframes spaceRotate{
+
+from{transform:rotate(0deg)}
+to{transform:rotate(360deg)}
+
+}
+
+/* 針 */
+
+.hand{
+position:absolute;
+left:50%;
+bottom:50%;
+transform-origin:bottom;
+border-radius:3px;
+}
+
+.hour{
+width:6px;
+height:60px;
+}
+
+.minute{
+width:4px;
+height:80px;
+}
+
+/* 流星秒針 */
+
+.second{
+width:2px;
+height:100px;
+
+background:linear-gradient(
+to top,
+rgba(255,255,255,0),
+currentColor 40%,
+currentColor
+);
+
+box-shadow:
+0 0 10px currentColor,
+0 0 20px currentColor;
+}
+
+/* 中心 */
+
+.center{
+position:absolute;
+width:12px;
+height:12px;
+background:white;
+border-radius:50%;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+}
+
+/* 目盛り */
+
+.mark{
+position:absolute;
+width:4px;
+height:12px;
+background:#777;
+left:50%;
+top:6px;
+transform-origin:center 104px;
+}
+
+/* JavaScript */
+
+.js .hour,.js .minute,.js .second{
+color:#FFD84A;
+background:#FFD84A;
+box-shadow:0 0 15px #FFD84A;
+}
+
+/* Python */
+
+.py .hour,.py .minute,.py .second{
+color:#2EA8FF;
+background:#2EA8FF;
+box-shadow:0 0 15px #2EA8FF;
+}
+
+/* C */
+
+.c .hour,.c .minute,.c .second{
+color:#FF3B4A;
+background:#FF3B4A;
+box-shadow:0 0 15px #FF3B4A;
+}
+
+.title{
+margin-bottom:15px;
+font-size:18px;
+}
+
+.stars{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+pointer-events:none;
+overflow:hidden;
+}
+
+/* 星 */
+
+.star{
+position:absolute;
+width:2px;
+height:2px;
+background:white;
+border-radius:50%;
+opacity:0.2;
+animation:twinkle 3s infinite;
+}
+
+/* 瞬き */
+
+@keyframes twinkle{
+
+0%{opacity:0.1}
+50%{opacity:1}
+100%{opacity:0.1}
+
+}
+
+.meteors{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+pointer-events:none;
+overflow:hidden;
+}
+
+.meteor{
+
+position:absolute;
+width:120px;
+height:2px;
+
+background:linear-gradient(
+to right,
+white,
+rgba(255,255,255,0)
+);
+
+opacity:0;
+
+transform:rotate(-25deg);
+
+animation:meteor 3s linear forwards;
+
+}
+
+@keyframes meteor{
+
+0%{
+opacity:1;
+transform:translate(-200px,-200px) rotate(-25deg);
+}
+
+100%{
+opacity:0;
+transform:translate(100vw,100vh) rotate(-25deg);
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="stars"></div>
+<div class="meteors"></div>
+
+<h1>🌌 Cosmic Programming Clock 🚀</h1>
+
+<div class="container">
+
+<div class="clock-box js">
+
+<div class="title">🟡 JavaScript</div>
+
+<div class="clock">
+
+<div id="js-h" class="hand hour"></div>
+<div id="js-m" class="hand minute"></div>
+<div id="js-s" class="hand second"></div>
+
+<div class="center"></div>
+
+</div>
+
+</div>
+
+
+<div class="clock-box py">
+
+<div class="title">🔵 Python</div>
+
+<div class="clock">
+
+<div id="py-h" class="hand hour"></div>
+<div id="py-m" class="hand minute"></div>
+<div id="py-s" class="hand second"></div>
+
+<div class="center"></div>
+
+</div>
+
+</div>
+
+
+<div class="clock-box c">
+
+<div class="title">🔴 C / WASM</div>
+
+<div class="clock">
+
+<div id="c-h" class="hand hour"></div>
+<div id="c-m" class="hand minute"></div>
+<div id="c-s" class="hand second"></div>
+
+<div class="center"></div>
+
+</div>
+
+</div>
+
+</div>
+
+<script src="clock.js"></script>
+
+<script>
+
+/* 目盛り */
+
+document.querySelectorAll(".clock").forEach(clock=>{
+
+for(let i=0;i<12;i++){
+
+let m=document.createElement("div")
+m.className="mark"
+m.style.transform=`rotate(${i*30}deg)`
+clock.appendChild(m)
+
+}
+
+})
+
+/* JavaScript時計 */
+
+setInterval(()=>{
+
+const d=new Date()
+
+let s=d.getSeconds()*6
+let m=d.getMinutes()*6 + s/60
+let h=(d.getHours()%12)*30 + m/12
+
+document.getElementById("js-s").style.transform=`rotate(${s}deg)`
+document.getElementById("js-m").style.transform=`rotate(${m}deg)`
+document.getElementById("js-h").style.transform=`rotate(${h}deg)`
+
+},1000)
+
+/* C時計 */
+
+setInterval(()=>{
+
+let s=Module.ccall("second_angle","number")
+let m=Module.ccall("minute_angle","number")
+let h=Module.ccall("hour_angle","number")
+
+document.getElementById("c-s").style.transform=`rotate(${s}deg)`
+document.getElementById("c-m").style.transform=`rotate(${m}deg)`
+document.getElementById("c-h").style.transform=`rotate(${h}deg)`
+
+},1000)
+
+/* 星生成 */
+
+const starField=document.querySelector(".stars")
+
+for(let i=0;i<120;i++){
+
+let star=document.createElement("div")
+
+star.className="star"
+
+star.style.left=Math.random()*100+"%"
+star.style.top=Math.random()*100+"%"
+
+star.style.animationDelay=Math.random()*5+"s"
+
+starField.appendChild(star)
+
+}
+
+const meteorField=document.querySelector(".meteors")
+
+function spawnMeteor(){
+
+let m=document.createElement("div")
+
+m.className="meteor"
+
+m.style.left=Math.random()*100+"%"
+m.style.top=Math.random()*30+"%"
+
+meteorField.appendChild(m)
+
+setTimeout(()=>{
+m.remove()
+},3000)
+
+}
+
+/* ランダム流星 */
+
+setInterval(()=>{
+
+if(Math.random()<0.5){
+
+spawnMeteor()
+
+}
+
+},4000)
+
+</script>
+
+
+<py-script>
+
+from js import document
+import datetime
+import asyncio
+
+def update():
+
+    t=datetime.datetime.now()
+
+    s=t.second*6
+    m=t.minute*6 + s/60
+    h=(t.hour%12)*30 + m/12
+
+    document.getElementById("py-s").style.transform=f"rotate({s}deg)"
+    document.getElementById("py-m").style.transform=f"rotate({m}deg)"
+    document.getElementById("py-h").style.transform=f"rotate({h}deg)"
+
+async def loop():
+
+    while True:
+
+        update()
+        await asyncio.sleep(1)
+
+asyncio.create_task(loop())
+
+</py-script>
+
+</body>
+</html>
